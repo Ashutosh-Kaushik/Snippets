@@ -1,0 +1,109 @@
+<snippet>
+	<content><![CDATA[
+bool inter1(int a,int b,int c,int d) {
+        if(a > b) {
+                swap(a,b);
+        }
+        if(c > d) {
+                swap(c,d);
+        }
+        return max(a,c) <= min(b,d);  
+}
+
+int sign(int x) { // signum function.
+        if(x > 0) {
+                return 1;
+        }
+        if(x  < 0) {
+                return -1;
+        }
+        return 0;
+}
+
+struct point {
+        int x,y;
+        point operator+= (point b) {
+                x += b.x;
+                y += b.y;
+                return *this;
+        }
+        point operator-= (point b) {
+                x -= b.x;
+                y -= b.y;
+                return *this;
+        }
+        point operator+ (point b) {
+                point temp = *this;
+                temp += b;
+                return temp;
+        }       
+        point operator- (point b) {
+                point temp = *this;
+                temp -= b;
+                return temp;
+        }       
+
+};
+
+/*
+x1 X2
+y1 y2
+*/
+int dot(point a,point b) {
+        return (a.x * b.x + a.y * b.y);
+}
+/* normal to x and y, that is in z
+cross det() =   |ex ey|
+                |x1 y1|
+                |x2 y2|
+similarly we can extend this to 3d.
+just use crammer's rule.
+*/
+int cross(point a,point b) {
+        return (a.x * b.y - a.y * b.x);
+}
+
+struct line {
+        int a,b,c;
+        line(point x,point y) {
+                int x1 = x.x, y1 = x.y, x2 = y.x, y2 = y.y;
+                a = y1 - y2;
+                b = x2 - x1;
+                c = x1 * (y2 - y1) - y1*(x2 - x1);
+        }
+};
+
+
+// checking whether two point intersect or not, this can be easily done using cross product
+// here we go.
+
+bool check(point a,point b, point c, point d) {
+        // collinear that is (a,b,d are in same line and a,b,c are int same line)
+        if(cross(a-b,a-d) == 0 and cross(a-b,a-c) == 0) {
+                return inter1(a.x,b.x,c.x,d.x) and inter1(a.y,b.y,c.y,d.y);
+        }
+        if(sign(cross(b-a,c-a)) != sign(cross(b-a,d-a)) and sign(cross(d-c,a-c)) != sign(cross(d-c,b-c))) {
+                return true;
+        }
+        return false;
+}
+
+point pointOfIntersection(struct line p, struct line q) { // call this after check , check returns true if there exists a solution 
+        int dd = det(p.a, p.b, q.a, q.b);
+        // here the case of parallel lines is not handled when dd == 0, then 
+        // dd == 0, x == 0 and y == 0 then solution is there otherwise not
+        // dd == 0 implies either no solution or infinite solution
+        int x = -1 * (det(p.c, p.b, q.c, q.b));
+        int y = -1 * (det(p.c, p.a, q.c, q.a));
+        x /= dd;
+        y /= dd;
+        point temp = {x,y};
+        return temp;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>geometry</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

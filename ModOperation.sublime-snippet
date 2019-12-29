@@ -1,0 +1,44 @@
+<snippet>
+	<content><![CDATA[
+ll pow(ll a,ll b, ll m) {
+        ll ans=1; 
+        while(b>0){ 
+                if(b%2==1) 
+                        ans=(ans*a)%m; 
+                b/=2; 
+                a=(a*a)%m; 
+        } 
+        return ans%m; 
+}
+ll InverseMod(ll a,ll m) {
+        return pow(a,m-2,m);
+}
+ 
+ll add(ll a,ll b,ll mod) {
+        ll c = (a + b);
+        if(c >= mod) {
+                c -= mod;
+        }
+        return c;
+}
+ll sub(ll a,ll b,ll mod) {
+        ll c = (a - b);
+        if(c < 0) {
+                c += mod;
+        }
+        return c;
+}
+ll mul(ll a,ll b,ll mod) {
+        ll c = (a*b)%mod;
+        return c;
+}
+ll div(ll a,ll b,ll mod) {
+        ll c = mul(a,InverseMod(b,mod),mod);
+        return c;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mod operation</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
